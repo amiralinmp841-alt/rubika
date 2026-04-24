@@ -1,16 +1,12 @@
 import requests
 
-# API public روبیکا (safe برای تست)
-url = "https://messengerapi.ir/api/v3/getUserInfo"
+TOKEN = "360729900:nkuhQxqh3Xt0fLqgo-9ABBbxWBbgi8yobsE"  # اینجا توکن بله رو بذار
 
-# فقط یک یوزرنیم تستی، مهم نیست
-data = {
-    "username": "rubika"
-}
+url = f"https://tapi.bale.ai/bot{TOKEN}/getMe"
 
 try:
-    r = requests.post(url, json=data, timeout=8)
-    print("Status code:", r.status_code)
+    r = requests.get(url, timeout=10)
+    print("Status Code:", r.status_code)
     print("Response:", r.text)
 except Exception as e:
     print("Error:", e)
