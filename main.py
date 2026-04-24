@@ -1,12 +1,31 @@
+import socket
 import requests
 
-TOKEN = "360729900:nkuhQxqh3Xt0fLqgo-9ABBbxWBbgi8yobsE"  # اینجا توکن بله رو بذار
+HOST = "messengerapi.ir"
+PORT = 443
 
-url = f"https://tapi.bale.ai/bot{TOKEN}/getMe"
-
+print("=== PHASE 1: DNS RESOLUTION TEST ===")
 try:
-    r = requests.get(url, timeout=10)
-    print("Status Code:", r.status_code)
-    print("Response:", r.text)
+    ip = socket.gethostbyname(HOST)
+    print(f"DNS OK → {HOST} resolved to {ip}")
 except Exception as e:
-    print("Error:", e)
+    print(f"DNS FAILED ❌ → {e}")
+
+print("\n=== PHASE 2: RAW TCP CONNECTION TEST ===")
+try:
+    sock = socket.create_connection((HOST, PORT), timeout=8)
+    print(f"TCP OK → able to connect to {HOST}:{PORT}")
+    sock.close()
+except Exception as e:
+    print(f"TCP FAILED ❌ → {e}")
+
+print("\n=== PHASE 3: HTTPS API TEST ===")
+try:
+    url = "https://messengerapi.ir/api/v3/getUserInfo"
+    payload = {"username": "rubika"}
+
+    r = requests.post(url, json=payload, timeout=8)
+    print("HTTPS OK → status:", r.status_code)
+    print("Response:", r.text[:300])
+except Exception as e:
+    print(f"HTTPS FAILED ❌ → {e}")
